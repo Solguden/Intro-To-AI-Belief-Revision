@@ -1,0 +1,31 @@
+# IntelliJ IDEA specific
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Maven specific
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsLocal
+
+# JAR files
+*.jar
+
+# Log files
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Miscellaneous
+*.class
+*.hprof
+*.user
+*.project
+*.tmp
+
+# Other files to ignore
+*.swp
