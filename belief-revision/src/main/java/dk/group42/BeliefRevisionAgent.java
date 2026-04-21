@@ -29,6 +29,12 @@ public final class BeliefRevisionAgent {
         return revised;
     }
 
+    public BeliefBase revise(Belief newBelief) {
+        BeliefBase contracted = base.contract("!(" + newBelief.formula() + ")");
+        BeliefBase revised    = contracted.expand(newBelief.formula(), newBelief.priority());
+        this.base = revised;
+        return revised;
+    }
 
 
     public BeliefBase contract(String formula) {

@@ -91,4 +91,13 @@ public final class BeliefBase {
         }
         return new BeliefBase(working);
     }
+
+    @Override
+    public String toString() {
+        var beliefsString = beliefs.stream()
+            .map(b -> b.toString() + "\n")
+            .reduce("", String::concat);
+
+        return "BeliefBase{" + "beliefs=" + beliefs + '}';
+    }
 }
