@@ -3,10 +3,6 @@ package dk.group42;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Demo entry point. Mirrors the output produced by the Python prototype
- * so you can diff the two and be sure the Java port is faithful.
- */
 public class App {
 
     public static void main(String[] args) {

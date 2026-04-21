@@ -2,14 +2,7 @@ package dk.group42;
 
 import java.util.Objects;
 
-/**
- * A literal in a CNF clause: an atom name paired with a sign.
- * <ul>
- *   <li>{@code positive = true}  &mdash; the atom itself (e.g. {@code p}).</li>
- *   <li>{@code positive = false} &mdash; its negation    (e.g. {@code !p}).</li>
- * </ul>
- * Immutable and value-equal.
- */
+
 public final class Literal {
 
     private final String atomName;
@@ -23,7 +16,7 @@ public final class Literal {
     public String atomName()  { return atomName; }
     public boolean positive() { return positive; }
 
-    /** Returns the literal with the opposite sign. */
+
     public Literal complement() {
         return new Literal(atomName, !positive);
     }

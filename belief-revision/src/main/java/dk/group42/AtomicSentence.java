@@ -2,11 +2,6 @@ package dk.group42;
 
 import java.util.Objects;
 
-/**
- * Leaf of the propositional-formula AST: a proposition variable
- * such as {@code p}, {@code rain}, or {@code A_1}.
- * Immutable and value-equal on the atom name.
- */
 public final class AtomicSentence implements Sentence {
 
     private final String name;

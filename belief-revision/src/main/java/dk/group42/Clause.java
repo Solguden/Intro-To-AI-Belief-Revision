@@ -4,18 +4,10 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * A clause: a disjunction of literals.
- * The empty clause represents falsum (&perp;) and therefore unsatisfiability.
- *
- * <p>Immutable after construction and value-equal on the literal set,
- * so clauses can be stored in hash-based collections safely.
- */
 public final class Clause {
 
     private final Set<Literal> literals;
 
-    /** Defensive copy: the caller can mutate their set without affecting this clause. */
     public Clause(Set<Literal> literals) {
         this.literals = Collections.unmodifiableSet(new HashSet<>(literals));
     }
@@ -32,11 +24,6 @@ public final class Clause {
         return literals.isEmpty();
     }
 
-    /**
-     * True iff the clause contains both some atom and its negation,
-     * which makes the clause a tautology and safe to discard from a
-     * resolution proof.
-     */
     public boolean isTautology() {
         Set<String> positives = new HashSet<>();
         Set<String> negatives = new HashSet<>();

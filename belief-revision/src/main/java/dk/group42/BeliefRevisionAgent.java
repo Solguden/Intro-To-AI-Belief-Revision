@@ -1,16 +1,5 @@
 package dk.group42;
 
-/**
- * Belief-revision agent applying the Levi identity:
- * <pre>
- *     K &lowast; &alpha;  =  (K &minus; &not;&alpha;) + &alpha;
- * </pre>
- *
- * <p>The agent keeps a mutable reference to the current belief base,
- * so successive operations (revise, contract, expand) stack naturally.
- * Each operation also returns the resulting {@link BeliefBase} for
- * convenience.
- */
 public final class BeliefRevisionAgent {
 
     private BeliefBase base;
@@ -27,16 +16,12 @@ public final class BeliefRevisionAgent {
         return base;
     }
 
-    // ----- revise -----
 
     public BeliefBase revise(String formula) {
         return revise(formula, null);
     }
 
-    /**
-     * K &lowast; &alpha;: first contract by &not;&alpha; to make room,
-     * then expand by &alpha;.
-     */
+
     public BeliefBase revise(String formula, Integer priority) {
         BeliefBase contracted = base.contract("!(" + formula + ")");
         BeliefBase revised    = contracted.expand(formula, priority);
@@ -44,14 +29,13 @@ public final class BeliefRevisionAgent {
         return revised;
     }
 
-    // ----- contract -----
+
 
     public BeliefBase contract(String formula) {
         this.base = base.contract(formula);
         return this.base;
     }
 
-    // ----- expand -----
 
     public BeliefBase expand(String formula) {
         return expand(formula, null);

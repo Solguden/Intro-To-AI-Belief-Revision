@@ -4,29 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-/**
- * Recursive-descent parser for propositional formulas.
- *
- * <h3>Supported syntax</h3>
- * <ul>
- *   <li>Negation:     {@code !}, {@code ~}, {@code not}</li>
- *   <li>Conjunction:  {@code &}, {@code ^}, {@code and}</li>
- *   <li>Disjunction:  {@code |}, {@code or}</li>
- *   <li>Implication:  {@code ->}, {@code =>}</li>
- *   <li>Equivalence:  {@code <->}, {@code <=>}</li>
- *   <li>Parentheses:  {@code ( )}</li>
- *   <li>Atoms: identifiers such as {@code p}, {@code rain}, {@code A1}, {@code x_2}</li>
- * </ul>
- *
- * <h3>Precedence (lowest to highest)</h3>
- * <ol>
- *   <li>{@code <->} (left-associative as parsed here)</li>
- *   <li>{@code ->}  (right-associative)</li>
- *   <li>{@code |}</li>
- *   <li>{@code &}</li>
- *   <li>{@code !}</li>
- * </ol>
- */
 public final class FormulaParser {
 
     private static final Set<String> WORD_OPS = Set.of("not", "and", "or");
@@ -51,7 +28,7 @@ public final class FormulaParser {
         return s;
     }
 
-    // ----- tokenizer -----
+    // tokenizer
 
     private static List<String> tokenize(String text) {
         List<String> out = new ArrayList<>();
@@ -93,7 +70,7 @@ public final class FormulaParser {
         return out;
     }
 
-    // ----- helpers -----
+    // helpers
 
     private String peek() {
         return pos >= tokens.size() ? null : tokens.get(pos);

@@ -2,13 +2,6 @@ package dk.group42;
 
 import java.util.Objects;
 
-/**
- * Internal node of the formula AST: a {@link Connective} with one
- * operand (for {@code NOT}) or two operands (for {@code AND},
- * {@code OR}, {@code IMPLIES}, {@code IFF}).
- *
- * <p>Immutable and value-equal on (connective, left, right).
- */
 public final class ComplexSentence implements Sentence {
 
     private final Connective connective;
@@ -28,12 +21,12 @@ public final class ComplexSentence implements Sentence {
         this.right = right;
     }
 
-    /** Factory for unary NOT. */
+
     public static ComplexSentence not(Sentence s) {
         return new ComplexSentence(Connective.NOT, s, null);
     }
 
-    /** Factory for binary connectives. */
+
     public static ComplexSentence binary(Connective op, Sentence a, Sentence b) {
         if (op == Connective.NOT) {
             throw new IllegalArgumentException("NOT is unary; use ComplexSentence.not(...)");

@@ -2,13 +2,6 @@ package dk.group42;
 
 import java.util.Objects;
 
-/**
- * A belief: a propositional formula together with a numeric priority.
- * Higher priority = more entrenched; lower-priority beliefs are
- * surrendered first during contraction.
- *
- * <p>Immutable and value-equal.
- */
 public final class Belief {
 
     private final String formula;

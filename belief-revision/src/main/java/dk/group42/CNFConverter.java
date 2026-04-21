@@ -25,7 +25,7 @@ public final class CNFConverter {
 
     private CNFConverter() { /* no instances */ }
 
-    /** Convenience: parse a formula string and convert it to clauses. */
+
     public static List<Clause> toClauses(String formula) {
         return toClauses(FormulaParser.parse(formula));
     }
@@ -37,7 +37,7 @@ public final class CNFConverter {
         return collectClauses(cnf);
     }
 
-    // ----- step 1: implications / biconditionals -----
+
 
     private static Sentence eliminateImplications(Sentence s) {
         if (s instanceof AtomicSentence) return s;
@@ -68,9 +68,8 @@ public final class CNFConverter {
         }
     }
 
-    // ----- step 2: Negation Normal Form -----
 
-    /** Push {@code !} down until it sits only on atoms. */
+
     private static Sentence toNNF(Sentence s) {
         if (s instanceof AtomicSentence) return s;
         ComplexSentence cs = (ComplexSentence) s;
@@ -105,12 +104,7 @@ public final class CNFConverter {
                 toNNF(cs.right()));
     }
 
-    // ----- step 3: distribute OR over AND -----
 
-    /**
-     * (&alpha; &and; &beta;) &or; &gamma;  =  (&alpha; &or; &gamma;) &and; (&beta; &or; &gamma;),
-     * applied recursively so the whole formula becomes a conjunction of disjunctions.
-     */
     private static Sentence distributeOr(Sentence a, Sentence b) {
         if (a instanceof ComplexSentence && ((ComplexSentence) a).connective() == Connective.AND) {
             ComplexSentence ca = (ComplexSentence) a;
@@ -131,7 +125,7 @@ public final class CNFConverter {
         if (s instanceof AtomicSentence) return s;
         ComplexSentence cs = (ComplexSentence) s;
 
-        // At this point (we are in NNF) NOT may only sit directly on an atom.
+
         if (cs.connective() == Connective.NOT) {
             if (cs.left() instanceof AtomicSentence) return cs;
             throw new IllegalStateException("Expected NNF literal but got NOT over " + cs.left());
@@ -147,7 +141,7 @@ public final class CNFConverter {
         throw new IllegalStateException("Unexpected connective in CNF conversion: " + cs.connective());
     }
 
-    // ----- step 4: flatten into clauses -----
+
 
     private static List<Clause> collectClauses(Sentence s) {
         List<Clause> clauses = new ArrayList<>();
