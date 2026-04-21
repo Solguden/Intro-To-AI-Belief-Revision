@@ -1,24 +1,17 @@
 # TODO
 
-1. design and implementation of belief base
-	- AtomicSentence := True | False | <Symbol>
-	- ComplexSentece := Combination of AtomicSentence, connected with logical operators
-	- LogicalOperators := !, ^, v, =>, <=>
-	- Truth table
+1. Tests to demonstrate that our code lives up to problem statement
+	- [ ] test checking of resolution-based logical entailment
+	- [ ] test partial meet contraction of belief base based on priority order
+	- [ ] test expansion of belief base
 
-2. design and implementation of a method for checking logical entailment (e.g., resolution-
-based), you should implement it yourself, without using any existing packages;
-    - pseudocode for entailment on p239
-    - pseudocode for resolution on p246
-    - pseudocode for forward chaining on p249
-    - pseudocode for CNF satisfiable on p252
-    - CNF definition and CYK-parse algorithm on pp887-888
-    - belief revision definition p353
+	- [ ] tests should use AGM postulates (where applicable)
+		- success
+		- inclusion
+		- vacuity
+		- consistency
+		- extensionality
+	- [ ] tests should verify that given a particular input belief base, the expected output belief base is calculated
 
-3. implementation of contraction of belief base (based on a priority order on formulas in the
-belief base);
-    - contraction lecture 10 p12
-
-4. implementation of expansion of belief base 
-    - expansion lecture 10 p12
+2. [ ] Report :)
 
