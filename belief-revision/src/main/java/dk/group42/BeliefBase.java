@@ -1,9 +1,6 @@
 package dk.group42;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public final class BeliefBase {
 
@@ -52,18 +49,14 @@ public final class BeliefBase {
     }
 
     public BeliefBase expand(String formula, Integer priority) {
-        BeliefBase next = this.copy();
-        int p = (priority != null) ? priority : (maxPriority(next.beliefs) + 1);
-        next.add(formula, p);
-        return next;
+        BeliefBase newBeliefBase = this.copy();
+        int p = (priority != null) ? priority : (maxPriority(newBeliefBase.beliefs) + 1);
+        newBeliefBase.add(formula, p);
+        return newBeliefBase;
     }
 
     private static int maxPriority(List<Belief> bs) {
-        int max = 0;
-        for (Belief b : bs) {
-            if (b.priority() > max) max = b.priority();
-        }
-        return max;
+        return bs.stream().mapToInt(Belief::priority).max().orElse(0);
     }
 
 
@@ -78,10 +71,11 @@ public final class BeliefBase {
             if (!probe.entails(formula)) break;
             if (working.isEmpty()) break;
 
-            int min = Integer.MAX_VALUE;
-            for (Belief b : working) {
-                if (b.priority() < min) min = b.priority();
-            }
+            int min = working.stream()
+                .mapToInt(Belief::priority)
+                .min()
+                .orElse(Integer.MAX_VALUE);
+
             for (int i = 0; i < working.size(); i++) {
                 if (working.get(i).priority() == min) {
                     working.remove(i);

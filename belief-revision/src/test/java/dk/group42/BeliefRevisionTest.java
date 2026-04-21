@@ -18,7 +18,6 @@ class BeliefRevisionTest {
   //Bob believes {p,q}
   //learns !q
   //new belief should be {p,!q}
-
   @Test
   void revisionTest1() {
     Belief p = new Belief("p", 1);
@@ -26,12 +25,8 @@ class BeliefRevisionTest {
 
     Belief notQ = new Belief("!q", 3);
 
-    BeliefBase base = new BeliefBase(List.of(p, q
-    ));
-
-
+    BeliefBase base = new BeliefBase(List.of(p, q));
     BeliefRevisionAgent agent = new BeliefRevisionAgent(base);
-
     BeliefBase revised = agent.revise(notQ);
 
     assertThat(revised).isNotNull();
@@ -44,9 +39,24 @@ class BeliefRevisionTest {
   //Assume Bob believes: Cn({p, q, r })
   //He learns, from a reliable source: ¬(q ∨ r )
   //Should be Cn({p, ¬(q ∨ r )})
-
   @Test
   void revisionTest2() {
+    Belief p = new Belief("p", 1);
+    Belief q = new Belief("q", 1);
+    Belief r = new Belief("r", 1);
 
+    Belief notQorR = new Belief("!(q | r)", 3);
+
+    BeliefBase base = new BeliefBase(List.of(p, q, r));
+    BeliefRevisionAgent agent = new BeliefRevisionAgent(base);
+    BeliefBase revised = agent.revise(notQorR);
+
+    assertThat(revised).isNotNull();
+    assertThat(revised.beliefs()).contains(notQorR);
+    assertThat(revised.beliefs()).doesNotContain(q);
+    assertThat(revised.beliefs()).doesNotContain(r);
+    assertThat(revised.isConsistent());
   }
+
+
 }
