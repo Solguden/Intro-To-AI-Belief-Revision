@@ -6,62 +6,61 @@ import java.util.Set;
 
 public final class Clause {
 
-    private final Set<Literal> literals;
+  private final Set<Literal> literals;
 
-    public Clause(Set<Literal> literals) {
-        this.literals = Collections.unmodifiableSet(new HashSet<>(literals));
-    }
+  public Clause(Set<Literal> literals) {
+    this.literals = Set.copyOf(literals);
+  }
 
-    public static Clause empty() {
-        return new Clause(Collections.emptySet());
-    }
+  public static Clause empty() {
+    return new Clause(Collections.emptySet());
+  }
 
-    public Set<Literal> literals() {
-        return literals;
-    }
+  public Set<Literal> literals() {
+    return literals;
+  }
 
-    public boolean isEmpty() {
-        return literals.isEmpty();
-    }
+  public boolean isEmpty() {
+    return literals.isEmpty();
+  }
 
-    public boolean isTautology() {
-        Set<String> positives = new HashSet<>();
-        Set<String> negatives = new HashSet<>();
-        for (Literal l : literals) {
-            if (l.positive()) {
-                positives.add(l.atomName());
-            } else {
-                negatives.add(l.atomName());
-            }
-            if (positives.contains(l.atomName()) && negatives.contains(l.atomName())) {
-                return true;
-            }
-        }
-        return false;
-    }
+  public boolean isTautology() {
+    Set<String> positives = literals.stream()
+        .filter(Literal::positive)
+        .map(Literal::atomName)
+        .collect(HashSet::new, HashSet::add, HashSet::addAll);
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Clause)) return false;
-        return literals.equals(((Clause) o).literals);
-    }
+    Set<String> negatives = literals.stream()
+        .filter(l -> !l.positive())
+        .map(Literal::atomName)
+        .collect(HashSet::new, HashSet::add, HashSet::addAll);
 
-    @Override
-    public int hashCode() {
-        return literals.hashCode();
-    }
+    return literals.stream()
+        .anyMatch(l -> positives.contains(l.atomName()) && negatives.contains(l.atomName()));
 
-    @Override
-    public String toString() {
-        if (literals.isEmpty()) return "\u22A5"; // ⊥
-        StringBuilder sb = new StringBuilder("{");
-        boolean first = true;
-        for (Literal l : literals) {
-            if (!first) sb.append(", ");
-            sb.append(l);
-            first = false;
-        }
-        return sb.append("}").toString();
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) {
+      return true;
     }
+    if (!(o instanceof Clause)) {
+      return false;
+    }
+    return literals.equals(((Clause) o).literals);
+  }
+
+  @Override
+  public int hashCode() {
+    return literals.hashCode();
+  }
+
+  @Override
+  public String toString() {
+    if (literals.isEmpty()) {
+      return "⊥";
+    }
+    return "{" + String.join(", ", literals.stream().map(Literal::toString).toList()) + "}";
+  }
 }

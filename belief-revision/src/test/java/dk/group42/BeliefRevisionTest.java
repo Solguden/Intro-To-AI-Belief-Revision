@@ -58,5 +58,14 @@ class BeliefRevisionTest {
     assertThat(revised.isConsistent());
   }
 
+  @Test
+  void contractionTest() {
+  }
+
+  @Test
+  void expansionTest() {
+
+  }
+
 
 }
