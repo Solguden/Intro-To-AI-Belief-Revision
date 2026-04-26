@@ -17,11 +17,9 @@ public final class Resolution {
       if (c2.literals().contains(comp)) {
         Set<Literal> merged = new HashSet<>(c1.literals());
         merged.remove(l);
-        for (Literal l2 : c2.literals()) {
-          if (!l2.equals(comp)) {
-            merged.add(l2);
-          }
-        }
+
+        merged.addAll(c2.literals().stream().filter(l2 -> !l2.equals(comp)).toList());
+
         Clause candidate = new Clause(merged);
         if (!candidate.isTautology()) {
           out.add(candidate);
@@ -35,11 +33,8 @@ public final class Resolution {
   public static boolean isUnsatisfiable(Collection<Clause> clauses) {
     Set<Clause> current = new HashSet<>(clauses);
 
-    // A literal empty clause in the input is already falsum.
-    for (Clause c : current) {
-        if (c.isEmpty()) {
-            return true;
-        }
+    if (clauses.stream().anyMatch(Clause::isEmpty)) {
+      return true;
     }
 
     while (true) {
@@ -50,38 +45,40 @@ public final class Resolution {
       for (int i = 0; i < n; i++) {
         for (int j = i + 1; j < n; j++) {
           Set<Clause> resolvents = resolve(snapshot.get(i), snapshot.get(j));
-          for (Clause r : resolvents) {
-              if (r.isEmpty()) {
-                  return true;
-              }
+
+          if (resolvents.stream().anyMatch(Clause::isEmpty)) {
+            return true;
           }
+
           produced.addAll(resolvents);
         }
       }
 
-        if (current.containsAll(produced)) {
-            return false; // saturation reached
-        }
+      if (current.containsAll(produced)) {
+        return false;
+      }
       current.addAll(produced);
     }
   }
 
 
-  public static boolean entails(Iterable<String> kb, String query) {
-    List<Clause> clauses = new ArrayList<>();
-    for (String f : kb) {
-      clauses.addAll(CNFConverter.toClauses(f));
-    }
+  public static boolean entails(Collection<String> kb, String query) {
+    List<Clause> clauses = new ArrayList<>(
+        kb.stream().map(CNFConverter::toClauses)
+            .flatMap(List::stream)
+            .toList());
+
     clauses.addAll(CNFConverter.toClauses("!(" + query + ")"));
     return isUnsatisfiable(clauses);
   }
 
 
-  public static boolean isConsistent(Iterable<String> formulas) {
-    List<Clause> clauses = new ArrayList<>();
-    for (String f : formulas) {
-      clauses.addAll(CNFConverter.toClauses(f));
-    }
+  public static boolean isConsistent(Collection<String> formulas) {
+    List<Clause> clauses = new ArrayList<>(
+        formulas.stream().map(CNFConverter::toClauses)
+            .flatMap(List::stream)
+            .toList());
+
     return !isUnsatisfiable(clauses);
   }
 

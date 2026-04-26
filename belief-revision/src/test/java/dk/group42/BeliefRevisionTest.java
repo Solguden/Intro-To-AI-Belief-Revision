@@ -58,6 +58,19 @@ class BeliefRevisionTest {
     assertThat(revised.isConsistent());
   }
 
+  //from exe_week09
+  //should follow from kb
+  @Test
+  void entailsTest1() {
+    var kb = new BeliefBase(List.of(
+        new Belief("!p -> q", 1),
+        new Belief("q -> p", 1),
+        new Belief("p -> r | s", 1)
+    ));
+
+    assertThat(kb.entails("p | r | s")).isTrue();
+  }
+
   @Test
   void contractionTest() {
   }
