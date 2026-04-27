@@ -30,7 +30,8 @@ public final class AGMChecks {
     BeliefRevisionAgent a = new BeliefRevisionAgent(initial.copy());
     BeliefBase revised = a.revise(alpha);
     BeliefBase expanded = initial.expand(alpha);
-    return revised.formulas().stream().anyMatch(f -> !expanded.entails(f));
+      // return true when every formula of K*α is entailed by K+α
+      return revised.formulas().stream().allMatch(expanded::entails);
   }
 
 
