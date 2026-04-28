@@ -2,9 +2,8 @@ package dk.group42;
 
 import java.util.Objects;
 
-public final class AtomicSentence implements Sentence {
-
-  private final String name;
+/// Represents a literal in an arbitrary propositional {@link Sentence}
+public record AtomicSentence(String name) implements Sentence {
 
   public AtomicSentence(String name) {
     this.name = Objects.requireNonNull(name, "name");
@@ -12,10 +11,6 @@ public final class AtomicSentence implements Sentence {
       throw new IllegalArgumentException("atom name must not be empty");
     }
 
-  }
-
-  public String name() {
-    return name;
   }
 
   @Override
@@ -32,11 +27,6 @@ public final class AtomicSentence implements Sentence {
       return false;
     }
     return name.equals(((AtomicSentence) o).name);
-  }
-
-  @Override
-  public int hashCode() {
-    return name.hashCode();
   }
 
   @Override

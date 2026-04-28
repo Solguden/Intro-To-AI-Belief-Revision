@@ -29,3 +29,7 @@ Thumbs.db
 
 # Other files to ignore
 *.swp
+/demo_contracted.txt
+/demo_expanded.txt
+/demo_revised.txt
+/demo_revised_agm.txt

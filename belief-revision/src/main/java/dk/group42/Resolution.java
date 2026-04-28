@@ -6,10 +6,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/// Collection of static methods used by the {@link BeliefRevisionAgent}
 public final class Resolution {
 
   private Resolution() { /* no instances */ }
 
+  /// Resolution according to Algorithm 4.18, p81, M. Ben-Ari, Mathematical Logic for Computer Science
   public static Set<Clause> resolve(Clause c1, Clause c2) {
     Set<Clause> out = new HashSet<>();
     for (Literal l : c1.literals()) {
@@ -29,7 +31,7 @@ public final class Resolution {
     return out;
   }
 
-
+  /// @return true if input collection of {@link Clause}s (aka. a formula on clausal form :^) ) are unsatisfiable
   public static boolean isUnsatisfiable(Collection<Clause> clauses) {
     Set<Clause> current = new HashSet<>(clauses);
 
@@ -62,20 +64,23 @@ public final class Resolution {
   }
 
 
-  public static boolean entails(Collection<String> kb, String query) {
+  /// @return `true` if `query` follows from {@link BeliefBase bb}
+  /// @param bb The Collection of {@link Belief}s which shoul derive `query`
+  /// @param query the query formula which the caller wants to know if derives form `bb`
+  public static boolean entails(Collection<String> bb, String query) {
     List<Clause> clauses = new ArrayList<>(
-        kb.stream().map(CNFConverter::toClauses)
+        bb.stream().map(Clause::fromFormulaString)
             .flatMap(List::stream)
             .toList());
 
-    clauses.addAll(CNFConverter.toClauses("!(" + query + ")"));
+    clauses.addAll(Clause.fromFormulaString("!(" + query + ")"));
     return isUnsatisfiable(clauses);
   }
 
-
+  /// @return true if input collection of `formulas` are consistent with eachother
   public static boolean isConsistent(Collection<String> formulas) {
     List<Clause> clauses = new ArrayList<>(
-        formulas.stream().map(CNFConverter::toClauses)
+        formulas.stream().map(Clause::fromFormulaString)
             .flatMap(List::stream)
             .toList());
 
@@ -83,6 +88,7 @@ public final class Resolution {
   }
 
 
+  /// @return true if formula `a` and fromula `b` are equivalent
   public static boolean equivalent(String a, String b) {
     return entails(List.of(), "(" + a + ") -> (" + b + ")")
         && entails(List.of(), "(" + b + ") -> (" + a + ")");

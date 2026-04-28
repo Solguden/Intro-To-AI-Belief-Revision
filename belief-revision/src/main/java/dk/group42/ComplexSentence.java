@@ -21,12 +21,16 @@ public final class ComplexSentence implements Sentence {
     this.right = right;
   }
 
-
+  /// Build a negated sentence
+  /// @param s sentence to negate
   public static ComplexSentence not(Sentence s) {
     return new ComplexSentence(Connective.NOT, s, null);
   }
 
-
+  /// Build a complex sentence, composed of a lhs and rhs and a connective
+  /// @param op logical connective
+  /// @param a lhs sentence
+  /// @param b rhs sentence
   public static ComplexSentence binary(Connective op, Sentence a, Sentence b) {
     if (op == Connective.NOT) {
       throw new IllegalArgumentException("NOT is unary; use ComplexSentence.not(...)");

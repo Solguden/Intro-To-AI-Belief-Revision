@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-
+/// Static methods to perform checks for the AGM postulates requested in the assignment statement
 public final class AGMChecks {
 
   private AGMChecks() { /* no instances */ }

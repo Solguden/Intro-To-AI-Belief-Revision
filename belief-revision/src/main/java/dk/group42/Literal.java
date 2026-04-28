@@ -2,23 +2,12 @@ package dk.group42;
 
 import java.util.Objects;
 
-
-public final class Literal {
-
-  private final String atomName;
-  private final boolean positive;
+/// Represents a literal such as `p` or `q` in a {@link Clause}
+public record Literal(String atomName, boolean positive) {
 
   public Literal(String atomName, boolean positive) {
     this.atomName = Objects.requireNonNull(atomName, "atomName");
     this.positive = positive;
-  }
-
-  public String atomName() {
-    return atomName;
-  }
-
-  public boolean positive() {
-    return positive;
   }
 
 
@@ -35,11 +24,6 @@ public final class Literal {
       return false;
     }
     return positive == l.positive && atomName.equals(l.atomName);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(atomName, positive);
   }
 
   @Override

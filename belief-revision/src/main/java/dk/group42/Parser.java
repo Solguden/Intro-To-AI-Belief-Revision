@@ -2,24 +2,28 @@ package dk.group42;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
-public final class FormulaParser {
-
-  private static final Set<String> WORD_OPS = Set.of("not", "and", "or");
+/// The parser recognizes the following symbols
+/// any literal:   `'p', 'q', 'this_is_a_literal'`
+/// biimplication: `<->`
+/// implication:   `->`
+/// negation:      `!`
+/// disjunction:   `|`
+/// conjunction:   `&`
+public final class Parser {
 
   private final List<String> tokens;
   private int pos = 0;
 
-  public FormulaParser(String text) {
+  public Parser(String text) {
     this.tokens = tokenize(text);
   }
 
-  /**
-   * Convenience: parse and return the AST root.
-   */
+  /// Directly parse a String rather
+  /// @return {@link Sentence} object representing input formula
+  /// @param text String with a propositional logic sentence following the syntax described in {@link Parser}
   public static Sentence parse(String text) {
-    return new FormulaParser(text).parseFormula();
+    return new Parser(text).parseFormula();
   }
 
   public Sentence parseFormula() {
@@ -30,9 +34,10 @@ public final class FormulaParser {
     return s;
   }
 
-  // tokenizer
-
-  private static List<String> tokenize(String text) {
+  /// Tokenize an input String
+  /// @return a token stream as a List String
+  /// @param text String with a propositional logic sentence following the syntax described in {@link Parser}
+  private List<String> tokenize(String text) {
     List<String> out = new ArrayList<>();
     int i = 0;
     while (i < text.length()) {
@@ -43,36 +48,24 @@ public final class FormulaParser {
         continue;
       }
 
-      // Multi-character operators: check longest first.
       if (text.startsWith("<->", i)) {
         out.add("<->");
         i += 3;
         continue;
       }
-      if (text.startsWith("<=>", i)) {
-        out.add("<->");
-        i += 3;
-        continue;
-      }
+
       if (text.startsWith("->", i)) {
         out.add("->");
         i += 2;
         continue;
       }
-      if (text.startsWith("=>", i)) {
-        out.add("->");
-        i += 2;
-        continue;
-      }
 
-      // Single-character punctuation / symbolic operators.
-      if ("()!~&|^".indexOf(c) >= 0) {
+      if ("()!&|".indexOf(c) >= 0) {
         out.add(String.valueOf(c));
         i++;
         continue;
       }
 
-      // Identifiers (possibly reserved words).
       if (Character.isLetter(c) || c == '_') {
         int j = i + 1;
         while (j < text.length()
@@ -80,8 +73,7 @@ public final class FormulaParser {
           j++;
         }
         String word = text.substring(i, j);
-        String lower = word.toLowerCase();
-        out.add(WORD_OPS.contains(lower) ? lower : word);
+        out.add(word);
         i = j;
         continue;
       }
