@@ -129,10 +129,10 @@ public final class Parser {
     return left;
   }
 
-  // or := and (('|' | 'or') and)*
+  // or := |)*
   private Sentence parseOr() {
     Sentence node = parseAnd();
-    while ("|".equals(peek()) || "or".equals(peek())) {
+    while ("|".equals(peek())) {
       consumeAny();
       node = ComplexSentence.binary(Connective.OR, node, parseAnd());
     }
@@ -142,7 +142,7 @@ public final class Parser {
   // and := not (('&' | '^' | 'and') not)*
   private Sentence parseAnd() {
     Sentence node = parseNot();
-    while ("&".equals(peek()) || "^".equals(peek()) || "and".equals(peek())) {
+    while ("&".equals(peek())) {
       consumeAny();
       node = ComplexSentence.binary(Connective.AND, node, parseNot());
     }
@@ -152,7 +152,7 @@ public final class Parser {
   // not := ('!' | '~' | 'not') not | atom
   private Sentence parseNot() {
     String t = peek();
-    if ("!".equals(t) || "~".equals(t) || "not".equals(t)) {
+    if ("!".equals(t)) {
       consumeAny();
       return ComplexSentence.not(parseNot());
     }
